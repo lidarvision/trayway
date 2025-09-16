@@ -1,0 +1,40 @@
+{
+  "name": "trayway",
+  "version": "1.0.0",
+  "description": "Удобный доступ к папкам и сайтам из трея macOS",
+  "main": "main.js",
+  "icon": "icon.icns",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lidarvision/trayway.git"
+  },
+  "homepage": "https://github.com/lidarvision/trayway",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . TrayWay --platform=darwin --arch=arm64 --out=release-build --overwrite --icon=app.icns --ignore='release-build' --ignore='node_modules' --ignore='.git' --ignore='\\.log$' --ignore='.DS_Store' --ignore='scripts' --ignore='\\.md$' --ignore='\\.txt$' --ignore='\\.log$' --ignore='test' --ignore='tests' --ignore='docs' --ignore='examples' --ignore='.vscode' --ignore='.idea' --ignore='\\.code-workspace$' --ignore='temp-dmg'",
+    "build:arm64": "electron-packager . TrayWay --platform=darwin --arch=arm64 --out=release-build --overwrite --icon=app.icns --ignore='release-build' --ignore='node_modules' --ignore='.git' --ignore='\\.log$' --ignore='.DS_Store' --ignore='scripts' --ignore='\\.md$' --ignore='\\.txt$' --ignore='\\.log$' --ignore='test' --ignore='tests' --ignore='docs' --ignore='examples' --ignore='.vscode' --ignore='.idea' --ignore='\\.code-workspace$' --ignore='temp-dmg'",
+    "build:x64": "electron-packager . TrayWay --platform=darwin --arch=x64 --out=release-build --overwrite --icon=app.icns --ignore='release-build' --ignore='node_modules' --ignore='.git' --ignore='\\.log$' --ignore='.DS_Store' --ignore='scripts' --ignore='\\.md$' --ignore='\\.txt$' --ignore='\\.log$' --ignore='test' --ignore='tests' --ignore='docs' --ignore='examples' --ignore='.vscode' --ignore='.idea' --ignore='\\.code-workspace$' --ignore='temp-dmg'",
+    "build:universal": "electron-packager . TrayWay --platform=darwin --arch=arm64,x64 --out=release-build --overwrite --icon=app.icns --ignore='release-build' --ignore='node_modules' --ignore='.git' --ignore='\\.log$' --ignore='.DS_Store' --ignore='scripts' --ignore='\\.md$' --ignore='\\.txt$' --ignore='\\.log$' --ignore='test' --ignore='tests' --ignore='docs' --ignore='examples' --ignore='.vscode' --ignore='.idea' --ignore='\\.code-workspace$' --ignore='temp-dmg'",
+    "build:optimized": "npm run build && node scripts/optimize-app.js \"release-build/TrayWay-darwin-arm64/TrayWay.app\" && node scripts/compress-resources.js \"release-build/TrayWay-darwin-arm64/TrayWay.app\"",
+    "build:optimized:x64": "npm run build:x64 && node scripts/optimize-app.js \"release-build/TrayWay-darwin-x64/TrayWay.app\" && node scripts/compress-resources.js \"release-build/TrayWay-darwin-x64/TrayWay.app\"",
+    "build:optimized:universal": "npm run build:universal && node scripts/optimize-app.js \"release-build/TrayWay-darwin-arm64/TrayWay.app\" && node scripts/compress-resources.js \"release-build/TrayWay-darwin-arm64/TrayWay.app\" && node scripts/optimize-app.js \"release-build/TrayWay-darwin-x64/TrayWay.app\" && node scripts/compress-resources.js \"release-build/TrayWay-darwin-x64/TrayWay.app\"",
+    "dmg:arm64": "node scripts/create-dmg.js arm64",
+    "dmg:x64": "node scripts/create-dmg.js x64",
+    "dmg:universal": "node scripts/create-dmg.js universal",
+    "dmg:all": "npm run dmg:arm64 && npm run dmg:x64 && npm run dmg:universal",
+    "release:arm64": "npm run build:optimized && npm run dmg:arm64",
+    "release:x64": "npm run build:optimized:x64 && npm run dmg:x64",
+    "release:universal": "npm run build:optimized:universal && npm run dmg:universal",
+    "release:all": "npm run build:optimized:universal && npm run dmg:all"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-packager": "^17.1.2",
+    "electron-reload": "^2.0.0-alpha.1",
+    "electron-updater": "^6.6.2"
+  },
+  "dependencies": {
+    "canvas": "^3.2.0",
+    "open": "^10.2.0"
+  }
+}

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Меню</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+    body {
+      background: #f8f8f8;
+      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      border-radius: 8px;
+      border: none;
+      padding: 8px 8px 8px 8px;
+      font-size: 15px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-width: 200px;
+      min-height: 50px;
+      max-height: 400px;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.1s ease-in;
+    }
+    
+    body.loaded {
+      opacity: 1;
+    }
+    
+    /* Убираем любые границы у контейнеров */
+    #foldersContainer, #sitesContainer, #appsContainer {
+      border: none;
+      margin: 0;
+      padding: 0;
+    }
+    .menu-item {
+      padding: 6px 28px 6px 20px;
+      cursor: pointer;
+      border-radius: 0;
+      color: #222;
+      background: transparent;
+      transition: background 0.12s, color 0.12s;
+      user-select: none;
+      line-height: 1.4;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 24px;
+      border: none;
+      margin: 0;
+    }
+    
+    .menu-item-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      font-size: 14px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .menu-item:hover {
+      background: rgba(0,0,0,0.08);
+      color: #111;
+    }
+    .separator {
+      height: 1px;
+      background: #d0d0d0;
+      margin: 8px 0 8px 0;
+      border: none;
+      border-radius: 0;
+      overflow: hidden;
+    }
+    
+    /* Стили для скроллбара */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: transparent;
+      margin: 4px 0;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #d0d0d0;
+      border-radius: 3px;
+      border: 1px solid #e0e0e0;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b0b0b0;
+    }
+  </style>
+</head>
+<body>
+  <div id="foldersContainer">
+    <!-- Папки будут добавлены динамически -->
+  </div>
+  <div class="separator"></div>
+  <div id="sitesContainer">
+    <!-- Сайты будут добавлены динамически -->
+  </div>
+  <div class="separator"></div>
+  <div id="appsContainer">
+    <!-- Приложения будут добавлены динамически -->
+  </div>
+  <div class="separator"></div>
+  <div class="menu-item" onclick="openSettings()">
+    <span class="menu-item-icon">⚙️</span>
+    <span>Настройки</span>
+  </div>
+  <script>
+    const { ipcRenderer, shell } = require('electron');
+    const fs = require('fs');
+    const path = require('path');
+    
+    let sites = {};
+    let folders = [];
+    let appName = '';
+    
+    // Загружаем конфигурацию
+    function loadConfig() {
+      try {
+        // Используем правильный путь для собранной версии
+        const configPath = path.join(process.resourcesPath, 'app', 'config.json');
+        if (fs.existsSync(configPath)) {
+          const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+          sites = {};
+          config.sites.forEach(site => {
+            sites[site.label] = site.url;
+          });
+          folders = config.folders || [];
+          appName = config.appName;
+        } else {
+          // Конфигурация по умолчанию (та же что в main.js)
+          sites = {
+            'Google': 'https://google.com'
+          };
+          folders = [
+            {
+              label: "Finder",
+              path: "/"
+            }
+          ];
+          appName = 'TrayWay';
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки конфигурации:', error);
+      }
+    }
+    
+    function openFolder(path) {
+      require('electron').shell.openPath(path);
+      window.close();
+    }
+    
+    function openSite(label) {
+      const url = sites[label];
+      
+      // Проверяем, является ли это приложением
+      if (url.includes('.app') || url.startsWith('/Applications/')) {
+        // Открываем приложение через shell.openPath
+        require('electron').shell.openPath(url);
+        window.close();
+        return;
+      }
+      
+      // Для сайтов проверяем настройку браузера
+      try {
+        const configPath = path.join(process.resourcesPath, 'app', 'config.json');
+        
+        if (fs.existsSync(configPath)) {
+          const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+          
+          if (config.useExternalBrowser) {
+            // Открываем в стандартном браузере пользователя
+            require('electron').ipcRenderer.send('open-external-browser', url);
+          } else {
+            // Открываем во внутреннем браузере приложения
+            require('electron').ipcRenderer.send('open-site', { label, url: url });
+          }
+        } else {
+          // По умолчанию используем внутренний браузер
+          require('electron').ipcRenderer.send('open-site', { label, url: url });
+        }
+      } catch (error) {
+        console.error('Ошибка при проверке настроек браузера:', error);
+        // В случае ошибки используем внутренний браузер
+        require('electron').ipcRenderer.send('open-site', { label, url: url });
+      }
+      
+      window.close();
+    }
+    
+    
+    // Закрывать меню при клике вне окна
+    document.addEventListener('mousedown', (e) => {
+      if (e.target === document.body) window.close();
+    });
+    
+    
+    // Загружаем конфигурацию при старте
+    loadConfig();
+    
+    // Обработчик обновления конфигурации от главного процесса
+    ipcRenderer.on('config-updated', (event, newConfig) => {
+      console.log('Получена обновленная конфигурация:', newConfig);
+      
+      // Обновляем локальные переменные
+      sites = {};
+      newConfig.sites.forEach(site => {
+        sites[site.label] = site.url;
+      });
+      folders = newConfig.folders || [];
+      appName = newConfig.appName;
+      
+      // Перерендериваем меню
+      renderFolders();
+      renderSites();
+      
+      // Обновляем размер окна
+      setTimeout(() => {
+        resizeWindow();
+      }, 50);
+    });
+    
+    // Функция для открытия настроек
+    function openSettings() {
+      require('electron').ipcRenderer.send('open-settings');
+      window.close();
+    }
+    
+    // Функция для рендеринга папок
+    function renderFolders() {
+      const container = document.getElementById('foldersContainer');
+      container.innerHTML = '';
+      
+      folders.forEach(folder => {
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        
+        // Добавляем иконку папки
+        const icon = document.createElement('span');
+        icon.className = 'menu-item-icon';
+        icon.textContent = '📁';
+        
+        // Добавляем текст
+        const text = document.createElement('span');
+        text.textContent = folder.label;
+        
+        div.appendChild(icon);
+        div.appendChild(text);
+        div.onclick = () => openFolder(folder.path);
+        container.appendChild(div);
+      });
+    }
+    
+    // Функция для рендеринга сайтов
+    function renderSites() {
+      const sitesContainer = document.getElementById('sitesContainer');
+      const appsContainer = document.getElementById('appsContainer');
+      
+      sitesContainer.innerHTML = '';
+      appsContainer.innerHTML = '';
+      
+      Object.keys(sites).forEach(label => {
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        
+        // Определяем тип элемента и выбираем иконку
+        let iconText = '🌐'; // По умолчанию сайт
+        let isApp = false;
+        
+        // Проверяем, является ли это приложением (по расширению .app или пути)
+        if (sites[label].includes('.app') || sites[label].startsWith('/Applications/')) {
+          iconText = '👾'; // Приложение
+          isApp = true;
+        } else if (sites[label].startsWith('http')) {
+          iconText = '🌐'; // Веб-сайт
+        } else if (sites[label].startsWith('file://')) {
+          iconText = '📄'; // Файл
+        }
+        
+        // Добавляем иконку
+        const icon = document.createElement('span');
+        icon.className = 'menu-item-icon';
+        icon.textContent = iconText;
+        
+        // Добавляем текст
+        const text = document.createElement('span');
+        text.textContent = label;
+        
+        div.appendChild(icon);
+        div.appendChild(text);
+        div.onclick = () => openSite(label);
+        
+        // Добавляем в соответствующий контейнер
+        if (isApp) {
+          appsContainer.appendChild(div);
+        } else {
+          sitesContainer.appendChild(div);
+        }
+      });
+      
+      // Скрываем разделители если контейнеры пустые
+      const separators = document.querySelectorAll('.separator');
+      
+      // Разделитель между папками и сайтами
+      if (folders.length === 0) {
+        separators[0].style.display = 'none';
+      } else {
+        separators[0].style.display = 'block';
+      }
+      
+      // Разделитель между сайтами и приложениями
+      if (sitesContainer.children.length === 0) {
+        separators[1].style.display = 'none';
+      } else {
+        separators[1].style.display = 'block';
+      }
+      
+      // Разделитель между приложениями и настройками
+      if (appsContainer.children.length === 0) {
+        separators[2].style.display = 'none';
+      } else {
+        separators[2].style.display = 'block';
+      }
+    }
+    
+    // Функция для автоматического изменения размера окна
+    function resizeWindow() {
+      // Небольшая задержка для корректного вычисления размеров
+      setTimeout(() => {
+        const contentHeight = document.body.scrollHeight;
+        const contentWidth = document.body.scrollWidth;
+        const maxHeight = 400; // Максимальная высота из CSS
+        
+        // Всегда ограничиваем высоту до максимальной для активации прокрутки
+        const finalHeight = maxHeight;
+        
+        // Добавляем небольшой отступ для скроллбара
+        const padding = 16; // 8px с каждой стороны
+        
+        require('electron').ipcRenderer.send('resize-menu-window', { 
+          width: contentWidth + padding, 
+          height: finalHeight + padding 
+        });
+      }, 10);
+    }
+    
+    // Обновляем рендеринг после загрузки конфигурации
+    setTimeout(() => {
+      renderFolders();
+      renderSites();
+      // Автоматически изменяем размер окна после рендеринга
+      setTimeout(() => {
+        resizeWindow();
+        // Показываем содержимое после полной загрузки
+        document.body.classList.add('loaded');
+      }, 50);
+    }, 100);
+  </script>
+</body>
+</html> 

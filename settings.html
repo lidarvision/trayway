@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Настройки</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
+    }
+    
+    body {
+      background: #f8f9fa;
+      color: #222;
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      font-size: 15px;
+      color: #222;
+      overflow: hidden;
+    }
+    
+    .header {
+      padding: 20px 25px 15px 25px;
+      border-bottom: 1px solid #e5e5e5;
+      margin-bottom: 0;
+      background: white;
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .header {
+      position: relative;
+    }
+    
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #007AFF;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s;
+    }
+    
+    .close-btn:hover {
+      background: #f0f0f0;
+      color: #666;
+    }
+    
+    .content {
+      padding-top: 60px;
+      padding-bottom: 35px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: calc(100vh - 95px);
+      box-sizing: border-box;
+    }
+    
+    .section {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: white;
+    }
+    
+    .section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .section h2 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .form-group {
+      margin-bottom: 6px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #444;
+      font-size: 14px;
+    }
+    
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #007AFF;
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.1);
+    }
+    
+    .input-with-button {
+      display: flex;
+      gap: 2px;
+      align-items: center;
+    }
+    
+    .input-with-button input {
+      flex: 1;
+    }
+    
+    .input-with-button .btn {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    
+    .add-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .add-buttons .btn {
+      flex: 1;
+    }
+    
+
+    
+    .site-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .site-type-badge {
+      font-size: 16px;
+      padding: 4px 8px;
+      background: #e9ecef;
+      color: #495057;
+    }
+    
+    .site-type-badge.app {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    
+    .site-type-badge.site {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .site-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .site-input-row input {
+      flex: 1;
+      font-size: 13px;
+    }
+    
+    .site-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+    
+    .site-item input {
+      font-size: 13px;
+    }
+    
+
+    
+
+    
+    .btn {
+      background: #007AFF;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    
+    .btn:hover {
+      background: #0056CC;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .btn-secondary:hover {
+      background: #545b62;
+    }
+
+    .btn-secondary.add-folder {
+      border-radius: 35px;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: #6c6e71;
+      background: transparent;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .btn-secondary.add-folder:hover {
+      background: #545b62;
+      color: white;
+    }
+    
+    .btn-danger {
+      background: #dc3545;
+    }
+    
+    .btn-danger:hover {
+      background: #c82333;
+    }
+    
+    .btn-small {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+    
+    .icon-preview {
+      width: 32px;
+      height: 32px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    
+    .actions {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      margin-top: 0;
+      padding: 12px 20px;
+      background: #ffffff !important;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      min-height: 40px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .actions .btn {
+      margin: 0 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    /* Специальные стили для кнопки Сохранить */
+    .actions .btn:first-child {
+      background: rgba(0, 122, 255, 0.1);
+      color: #007AFF;
+      border: none;
+    }
+    
+    /* Специальные стили для кнопки Сбросить */
+    .actions .btn.btn-secondary {
+      background: rgba(108, 117, 125, 0.1);
+      color: #6c757d;
+      border: none;
+    }
+    
+    .file-input {
+      display: none;
+    }
+    
+    .file-label {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+      color: #555;
+    }
+    
+    .file-label:hover {
+      background: #e9ecef;
+    }
+    
+    .info-text {
+      color: #666;
+      margin-top: 5px;
+      display: block;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    
+    /* Скроллбар - не влияет на размеры контента */
+    .content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+    
+    .content::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* Убираем влияние скроллбара на размеры */
+    .content {
+      scrollbar-width: thin;
+      scrollbar-color: #c1c1c1 transparent;
+    }
+
+    /* Фиксированная ширина для островов */
+    .folder-row, .site-row {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Контейнеры для папок и сайтов */
+    #foldersContainer, #sitesContainer {
+      width: 100%;
+      box-sizing: border-box;
+      padding-right: 6px;
+    }
+
+    /* Фиксированные вкладки в хедере */
+    .tabs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      background: white;
+      padding: 0;
+      margin-bottom: 0;
+      gap: 4px;
+      border-bottom: 1px solid #e5e5e5;
+      z-index: 100;
+      height: 50px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: #007AFF;
+    }
+
+    .tab-btn.active {
+      color: #007AFF;
+      background: rgba(0, 122, 255, 0.1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Стили для секций - прозрачные */
+    .section {
+      background: transparent;
+      padding: 12px;
+      margin-bottom: 4px;
+    }
+
+    .section h2 {
+      color: #333;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* Простые кнопки без теней */
+    .btn {
+      background: #007AFF;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #0056CC;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #007AFF;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 122, 255, 0.1);
+    }
+
+    .btn-danger {
+      background: #FF3B30;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #CC2E25;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+
+    /* Простые поля ввода */
+    input[type="text"], select {
+      background: transparent;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+
+    /* Простые карточки */
+    .site-item {
+      background: transparent;
+      padding: 12px;
+    }
+
+    .site-item:hover {
+      border-color: #007AFF;
+    }
+
+    /* Простые бейджи */
+    .folder-type-badge, .site-type-badge {
+      background: #007AFF;
+      color: white;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .site-type-badge.app {
+      background: #34C759;
+    }
+
+    /* Простые действия */
+    .actions {
+      background: transparent;
+      padding: 20px;
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    /* Поля ввода с кнопками */
+    .input-with-button {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .input-with-button input {
+      flex: 1;
+    }
+
+            /* Компактная строка папки - в том же стиле, что и сайты */
+        .folder-row {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            padding: 0;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 35px;
+            background: transparent;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .folder-left {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            padding-left: 4px;
+        }
+
+        .folder-right {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            padding-right: 4px;
+        }
+
+        /* Стили для сайтов в том же стиле, что и папки */
+        .site-row {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            padding: 0;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 35px;
+            background: transparent;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .site-left {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            padding-left: 4px;
+        }
+
+        .site-right {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            padding-right: 4px;
+        }
+
+        .site-name-input {
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+            border: none;
+            border-radius: 35px;
+            background: transparent;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .site-name-input:focus {
+            outline: none;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 0 35px 35px 0;
+        }
+
+        .site-url-input {
+            flex: 1;
+            min-width: 300px;
+            border: none;
+            border-radius: 35px;
+            background: transparent;
+            font-size: 14px;
+            padding: 8px 16px;
+        }
+
+        .site-url-input:focus {
+            outline: none;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 0 35px 35px 0;
+        }
+
+        .btn-select {
+            color: #007AFF;
+        }
+
+        .site-globe {
+            color: #6c757d;
+        }
+
+        .site-globe.app {
+            color: #34C759;
+        }
+
+        .site-url-container {
+            display: none;
+        }
+
+        .site-name-container {
+            display: block;
+        }
+
+        .site-actions-normal {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            flex-direction: row;
+        }
+
+        .site-actions-save {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+        }
+
+        .btn-save {
+            color: #34C759;
+        }
+
+        .url-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: transparent;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 35px;
+            padding: 0;
+        }
+
+        .url-prefix {
+            color: #6c757d;
+            font-size: 14px;
+            padding: 8px 0 8px 16px;
+            background: transparent;
+            user-select: none;
+        }
+
+        .url-input-wrapper .site-url-input {
+            border: none;
+            border-radius: 0 35px 35px 0;
+            background: transparent;
+            padding: 8px 16px;
+            margin: 0;
+            min-width: 200px;
+        }
+
+        .url-input-wrapper {
+            border-radius: 0 35px 35px 0;
+        }
+
+        .site-hint {
+            color: #6c757d;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .folder-hint {
+            color: #6c757d;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .app-hint {
+            color: #6c757d;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+
+        .centered-title {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .section-group {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .add-buttons-top {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .add-buttons-top .btn {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+        }
+
+        .add-buttons-top .btn::before {
+            content: attr(data-emoji);
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .add-buttons-top .btn-text {
+            font-size: 12px;
+            line-height: 1;
+        }
+
+
+
+        .hint-text {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+           
+            padding: 10px;
+            line-height: 1.4;
+        }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 50%;
+      transition: background 0.2s;
+      height: 36px;
+      width: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      background: rgba(0, 0, 0, 0.05);
+      outline: none;
+      border-radius: 50%;
+    }
+
+    .btn-icon:focus {
+      outline: none;
+    }
+
+
+
+    .folder-select-btn {
+      color: #007AFF;
+    }
+
+    .folder-open-btn {
+      color: #34C759;
+    }
+
+    /* Стили для папок в том же стиле, что и сайты */
+    .folder-item {
+      background: transparent;
+      padding: 12px;
+      margin-bottom: 3px;
+    }
+
+    .folder-item:hover {
+      border-color: #007AFF;
+    }
+
+    .btn-remove {
+      color: #FF3B30;
+    }
+
+    .btn-edit {
+      color: #007AFF;
+      transform: scaleX(-1);
+    }
+
+    .folder-name-input {
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
+      border: none;
+      border-radius: 35px;
+      background: transparent;
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+
+    .folder-name-input:focus {
+      outline: none;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 0 35px 35px 0;
+    }
+
+    
+
+
+
+    /* Адд-кнопки */
+    .add-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    /* Заголовки элементов */
+    .site-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .site-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .site-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /* Информационные тексты */
+    .info-text {
+      color: #666;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 8px;
+      padding: 16px 20px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 35px;
+    }
+
+    /* Иконки */
+    .icon-preview {
+      width: 48px;
+      height: 48px;
+    }
+
+    /* Файловые инпуты */
+    .file-input {
+      display: none;
+    }
+
+    .file-label {
+      background: #007AFF;
+      color: white;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .file-label:hover {
+      background: #0056CC;
+    }
+
+    /* Селекты */
+    select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    /* Уведомления */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #34C759;
+      color: white;
+      padding: 16px 24px;
+      z-index: 1000;
+    }
+
+    /* Стили для тумблера */
+    .toggle-container {
+      margin: 15px 0;
+    }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 500;
+      color: #333;
+      width: 100%;
+    }
+
+    .toggle-input {
+      display: none;
+    }
+
+    .toggle-slider {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      background: #ccc;
+      border-radius: 30px;
+      cursor: pointer;
+      border: 2px solid #ccc;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-handle {
+      position: absolute;
+      top: 4px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border-radius: 50%;
+      transition: left 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-input:checked + .toggle-slider {
+      background: #007AFF;
+      border-color: #007AFF;
+    }
+
+    .toggle-input:checked + .toggle-slider .toggle-handle {
+      left: 22px;
+    }
+
+    .toggle-slider:hover {
+      background: #b3b3b3;
+    }
+
+    .toggle-input:checked + .toggle-slider:hover {
+      background: #0056CC;
+    }
+
+    .section-header-with-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header-with-toggle .title-group {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .section-header-with-toggle .toggle-container {
+      margin: 0;
+    }
+
+
+
+    /* Стили для скрытия/показа контента иконки */
+    .icon-content {
+      transition: all 0.3s ease;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .icon-content.hidden {
+      max-height: 0;
+      opacity: 0;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .icon-content.visible {
+      max-height: 500px;
+      opacity: 1;
+      pointer-events: auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Стили для вопросительного знака и всплывающих подсказок */
+    .help-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      background: #999;
+      color: white;
+      border-radius: 50%;
+      font-size: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: background 0.2s;
+    }
+
+    .help-icon:hover {
+      background: #666;
+    }
+
+    .help-tooltip {
+      position: absolute;
+      background: #333;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.4;
+      width: calc(100vw - 80px);
+      max-width: 600px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .help-tooltip.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .help-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 8px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid #333;
+    }
+
+    /* Стили для контейнера селектора смайликов */
+    .emoji-selector-container {
+      display: flex;
+      justify-content: flex-start;
+      margin: 20px 0;
+    }
+
+    /* Стили для отображения текущего смайлика */
+    .current-emoji-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .current-emoji-display:hover {
+      opacity: 0.8;
+    }
+
+    .current-emoji {
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background: transparent;
+    }
+
+    .emoji-hint {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    }
+
+    /* Стили для поля ввода текста */
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #444;
+      font-size: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-size: 14px;
+      background: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+
+    /* Стили для попапа смайликов */
+    .emoji-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .emoji-popup.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .emoji-popup-content {
+      background: white;
+      border-radius: 16px;
+      padding: 0;
+      max-width: 90vw;
+      max-height: 85vh;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      overflow: hidden;
+    }
+
+    .emoji-popup.show .emoji-popup-content {
+      transform: scale(1);
+    }
+
+    .emoji-popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .emoji-popup-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .emoji-popup-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #999;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .emoji-popup-close:hover {
+      background: #f0f0f0;
+      color: #666;
+    }
+
+    /* Стили для таблицы смайликов в попапе */
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 40px);
+      gap: 8px;
+      padding: 20px 24px;
+      max-height: 400px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .emoji-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      font-size: 24px;
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+      flex-shrink: 0;
+      min-width: 40px;
+      max-width: 40px;
+    }
+
+    .emoji-item:hover {
+      background: rgba(0, 122, 255, 0.1);
+      border-color: rgba(0, 122, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .emoji-item.selected {
+      background: #007AFF;
+      color: white;
+      border-color: #007AFF;
+      transform: scale(1.1);
+    }
+
+    /* Стили для селектора иконки в стиле папок */
+    .icon-selector-row {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      padding: 0;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 35px;
+      background: transparent;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .icon-selector-left {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      padding-left: 4px;
+    }
+
+    .icon-selector-right {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      padding-right: 4px;
+    }
+
+    .icon-select-btn {
+      color: #007AFF;
+      background: transparent;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 50%;
+      transition: background 0.2s;
+      height: 36px;
+      width: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-select-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+      outline: none;
+      border-radius: 50%;
+    }
+
+    .icon-select-btn:focus {
+      outline: none;
+    }
+
+    .current-emoji-icon {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-name-container {
+      display: block;
+    }
+
+    .icon-hint {
+      color: #6c757d;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .icon-text-container {
+      display: block;
+    }
+
+    .icon-text-input {
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
+      border: none;
+      border-radius: 35px;
+      background: transparent;
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+
+    .icon-text-input:focus {
+      outline: none;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 0 35px 35px 0;
+    }
+
+    .btn-save {
+      color: #34C759;
+    }
+
+    /* Стили для подсказок под селектором иконки */
+    .icon-help-text {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .icon-help-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-help-icon {
+      font-size: 12px;
+      color: #6c757d;
+      transform: translateY(1px);
+    }
+
+    .icon-help-text {
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    /* Стили для управления форматом времени */
+    .time-format-section {
+      margin-top: 8px;
+      padding-left: 4px;
+    }
+
+    .time-format-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .time-format-title {
+      font-size: 12px;
+      color: #666;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .time-format-option {
+      cursor: pointer;
+      font-weight: 600;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      text-decoration: underline;
+      font-size: 12px;
+    }
+
+    .time-format-option:hover {
+      background: rgba(0, 122, 255, 0.1);
+    }
+
+    .time-format-option.selected {
+      color: #007AFF;
+      background: rgba(0, 122, 255, 0.1);
+    }
+
+    .time-format-option:not(.selected) {
+      color: #6c757d;
+    }
+
+    .am-pm-toggle-container {
+      flex-shrink: 0;
+    }
+
+    .toggle-text {
+      margin-left: 8px;
+      font-size: 12px;
+      color: #333;
+      font-weight: 500;
+    }
+    
+    .update-status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    
+    .update-status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .update-status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .update-status.info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+  </style>
+</head>
+<body>
+  
+  
+  <!-- Фиксированные вкладки в хедере -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('main', event)">📁 Папки и ссылки</button>
+    <button class="tab-btn" onclick="showTab('advanced', event)">⚙️ Дополнительно</button>
+  </div>
+
+  <div class="content">
+
+    <!-- Вкладка Папки и ссылки -->
+    <div id="main-tab" class="tab-content active">
+      <p class="hint-text">Добавьте любимые папки, сайты и приложения, которые будут доступны в трее и по ⌘+1</p>
+      
+      <!-- Кнопки добавления -->
+      <div class="add-buttons-top">
+        <button class="btn btn-secondary add-folder" onclick="addFolder()" data-emoji="📁">
+          <span class="btn-text">Добавить папку</span>
+        </button>
+        <button class="btn btn-secondary add-folder" onclick="addSite()" data-emoji="🌐">
+          <span class="btn-text">Добавить сайт</span>
+        </button>
+        <button class="btn btn-secondary add-folder" onclick="addApplication()" data-emoji="👾">
+          <span class="btn-text">Добавить приложение</span>
+        </button>
+      </div>
+      
+      <!-- Секция папок -->
+      <div class="section-group">
+        <h3 class="section-title">Папки</h3>
+        <div id="foldersContainer"></div>
+      </div>
+      
+      <!-- Секция ссылок -->
+      <div class="section-group">
+        <h3 class="section-title">Ссылки и приложения</h3>
+        <div id="sitesContainer"></div>
+      </div>
+      
+      <!-- Кнопки добавления внизу вкладки -->
+      <div class="add-buttons-top">
+        <button class="btn btn-secondary add-folder" onclick="addFolder()" data-emoji="📁">
+          <span class="btn-text">Добавить папку</span>
+        </button>
+        <button class="btn btn-secondary add-folder" onclick="addSite()" data-emoji="🌐">
+          <span class="btn-text">Добавить сайт</span>
+        </button>
+        <button class="btn btn-secondary add-folder" onclick="addApplication()" data-emoji="👾">
+          <span class="btn-text">Добавить приложение</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Вкладка Дополнительно -->
+    <div id="advanced-tab" class="tab-content">
+      <div class="section">
+        <h2 class="section-header-with-toggle">
+          <div class="title-group">
+            Иконка в трее
+            <span class="help-icon" onclick="showHelpTooltip(event, 'iconHelp')">?</span>
+          </div>
+          <div class="toggle-container">
+            <label class="toggle-label">
+              <input type="checkbox" id="allowIconChange" class="toggle-input">
+              <div class="toggle-slider">
+                <div class="toggle-handle"></div>
+              </div>
+            </label>
+          </div>
+        </h2>
+        <div id="iconHelp" class="help-tooltip">
+          ⚠️ Иконка в трее будет прозрачной, но приложение останется активным
+        </div>
+        <div id="iconChangeContent" class="icon-content hidden">
+          <div class="icon-selector-row">
+            <div class="icon-selector-left">
+              <button class="btn btn-icon icon-select-btn" onclick="toggleEmojiPopup()" title="Выбрать иконку">
+                <span id="currentEmoji" class="current-emoji-icon">😊</span>
+              </button>
+              <div class="icon-text-container" id="icon-text-container" style="display: block;">
+                <input type="text" id="trayText" placeholder="Текст в трее" 
+                       onchange="updateTrayText(this.value)" class="icon-text-input">
+              </div>
+              <span class="icon-hint" id="icon-hint" style="display: none;">
+                ← нажмите на иконку чтобы изменить
+              </span>
+            </div>
+            <div class="icon-selector-right">
+              <button class="btn btn-icon btn-edit" onclick="editTrayText()" title="Изменить текст" id="edit-text-btn" style="display: inline-flex;">
+                ✏️
+              </button>
+              <button class="btn btn-icon btn-save" onclick="saveTrayText()" title="Сохранить текст" id="save-text-btn" style="display: none;">
+                ✅
+              </button>
+            </div>
+          </div>
+          <div class="icon-help-text">
+            <div class="icon-help-item">
+              <span class="icon-help-icon">😊</span>
+              <span class="icon-help-text">вы можете выбрать иконку</span>
+            </div>
+            <div class="icon-help-item">
+              <span class="icon-help-icon">✏️</span>
+              <span class="icon-help-text">вы можете написать текст</span>
+            </div>
+          </div>
+          <div id="emojiPopup" class="emoji-popup hidden">
+            <div class="emoji-popup-content">
+              <div class="emoji-popup-header">
+                <span class="emoji-popup-title">Выберите смайлик</span>
+                <button class="emoji-popup-close" onclick="closeEmojiPopup()">✕</button>
+              </div>
+              <div id="emojiGrid" class="emoji-grid">
+                <!-- Смайлики будут добавлены через JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+      <div class="section">
+        <h2 class="section-header-with-toggle">
+          <div class="title-group">
+            Показывать время в трее
+            <span class="help-icon" onclick="showHelpTooltip(event, 'clockHelp')">?</span>
+          </div>
+          <div class="toggle-container">
+            <label class="toggle-label">
+              <input type="checkbox" id="showClock" class="toggle-input">
+              <div class="toggle-slider">
+                <div class="toggle-handle"></div>
+              </div>
+            </label>
+          </div>
+        </h2>
+        <div id="clockHelp" class="help-tooltip">
+          ⏰ При включении в трее будет отображаться текущее время
+        </div>
+        <div id="timeFormatContent" class="icon-content hidden">
+          <div class="time-format-section">
+            <div class="time-format-row">
+              <div class="time-format-title">
+                Выберите формат времени: 
+                <span class="time-format-option" id="timeFormat12" onclick="selectTimeFormat(false)">12ч</span>
+                /
+                <span class="time-format-option" id="timeFormat24" onclick="selectTimeFormat(true)">24ч</span>
+              </div>
+              <div class="am-pm-toggle-container" id="amPmToggleContainer" style="display: none;">
+                <label class="toggle-label">
+                  <input type="checkbox" id="showAmPm" class="toggle-input">
+                  <div class="toggle-slider">
+                    <div class="toggle-handle"></div>
+                  </div>
+                  <span class="toggle-text">AM/PM</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-header-with-toggle">
+          <div class="title-group">
+            Показывать заряд батареи в трее
+            <span class="help-icon" onclick="showHelpTooltip(event, 'batteryHelp')">?</span>
+          </div>
+          <div class="toggle-container">
+            <label class="toggle-label">
+              <input type="checkbox" id="showBattery" class="toggle-input">
+              <div class="toggle-slider">
+                <div class="toggle-handle"></div>
+              </div>
+            </label>
+          </div>
+        </h2>
+        <div id="batteryHelp" class="help-tooltip">
+          🔋 При включении в трее будет отображаться процент заряда батареи
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 class="section-header-with-toggle">
+          <div class="title-group">
+            Запускать при старте macOS
+            <span class="help-icon" onclick="showHelpTooltip(event, 'autostartHelp')">?</span>
+          </div>
+          <div class="toggle-container">
+            <label class="toggle-label">
+              <input type="checkbox" id="autoStart" class="toggle-input">
+              <div class="toggle-slider">
+                <div class="toggle-handle"></div>
+              </div>
+            </label>
+          </div>
+        </h2>
+        <div id="autostartHelp" class="help-tooltip">
+          🚀 Приложение будет автоматически запускаться при входе в систему и работать в фоновом режиме.
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2 style="text-align: center;">Обновления</h2>
+        <div class="form-group" style="text-align: center;">
+          <button class="btn btn-secondary" id="checkUpdatesBtn" onclick="checkForUpdates()">
+            <span class="btn-text">Проверить обновления</span>
+          </button>
+          <div id="updateStatus" class="update-status" style="display: none; text-align: center;">
+            <div class="update-message"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    
+    <div class="actions">
+      <button class="btn" onclick="saveSettings()">Сохранить</button>
+      <button class="btn btn-secondary" onclick="resetToDefaults()">Сбросить</button>
+    </div>
+  </div>
+  
+  <script src="settings.js"></script>
+</body>
+</html>
+
